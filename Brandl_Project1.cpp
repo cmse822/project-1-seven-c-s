@@ -2,14 +2,16 @@
 #include <cstdlib>
 #include <ctime>
 
+// Part 1 - Multiplying Two Matrices
+
 using namespace std;
 
 int main() {
 
     // make the dimensions of each matrix : A, B, C
 
-    int const rowsA = 2, columnsA = 2;
-    int const rowsB = 2, columnsB = 2;
+    int const rowsA = 100, columnsA = 100;
+    int const rowsB = 100, columnsB = 100;
     int const rowsC = rowsA, columnsC = columnsB;
 
     // ensure every time this code runs, the integers are random
@@ -21,20 +23,20 @@ int main() {
     int matrixA[rowsA][columnsA];
     for (int i = 0; i < rowsA; ++i) {
         for (int j = 0; j < columnsA; ++j) {
-            matrixA[i][j] = rand() ;
+            matrixA[i][j] = (rand() % 10) ;
         }
     }
 
     int matrixB[rowsB][columnsB];
     for (int i = 0; i < rowsB; ++i) {
         for (int j = 0; j < columnsB; ++j) {
-            matrixB[i][j] = rand() ;
+            matrixB[i][j] = (rand() % 10) ;
         }
     }
 
 
     // display matrices A and B
-    
+
     cout << "Matrix A with random integers:" << endl;
     for (int i = 0; i < rowsA; ++i) {
         for (int j = 0; j < columnsA; ++j) {
