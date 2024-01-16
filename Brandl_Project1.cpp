@@ -8,8 +8,8 @@ int main() {
 
     // make the dimensions of each matrix : A, B, C
 
-    int const rowsA = 4, columnsA = 3;
-    int const rowsB = 3, columnsB = 4;
+    int const rowsA = 2, columnsA = 2;
+    int const rowsB = 2, columnsB = 2;
     int const rowsC = rowsA, columnsC = columnsB;
 
     // ensure every time this code runs, the integers are random
@@ -36,12 +36,11 @@ int main() {
 
     int matrixC[rowsC][columnsC];
     for (int i = 0; i < rowsC; ++i) {
-        for (int j = 0; j < columnsC; ++j) {
-            matrixC[i][j] = 0;
-            for (int k = 0; k < columnsA; ++k) {
+        for (int j = 0; j < columnsC; ++j)
+            for (int k = 0; k < columnsA; ++k) 
+            {
                 matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
             }
-        }
     }
 
     // display matrix C
