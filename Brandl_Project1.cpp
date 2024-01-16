@@ -16,31 +16,53 @@ int main() {
 
     srand(time(0));
 
-    // fill each matrix with random integers : A, B
+    // fill each matrix with random integers  : A, B
 
     int matrixA[rowsA][columnsA];
     for (int i = 0; i < rowsA; ++i) {
         for (int j = 0; j < columnsA; ++j) {
-            matrixA[i][j] = rand();
+            matrixA[i][j] = rand() ;
         }
     }
 
     int matrixB[rowsB][columnsB];
     for (int i = 0; i < rowsB; ++i) {
         for (int j = 0; j < columnsB; ++j) {
-            matrixB[i][j] = rand();
+            matrixB[i][j] = rand() ;
         }
+    }
+
+
+    // display matrices A and B
+    cout << "Matrix A with random integers:" << endl;
+    for (int i = 0; i < rowsA; ++i) {
+        for (int j = 0; j < columnsA; ++j) {
+            cout << matrixA[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+    cout << "Matrix B with random integers:" << endl;
+    for (int i = 0; i < rowsB; ++i) {
+        for (int j = 0; j < columnsB; ++j) {
+            cout << matrixB[i][j] << " ";
+        }
+        cout << endl;
     }
 
     // multiply A and B to get matrix C
 
     int matrixC[rowsC][columnsC];
     for (int i = 0; i < rowsC; ++i) {
-        for (int j = 0; j < columnsC; ++j)
+        for (int j = 0; j < columnsC; ++j) {
+            matrixC[i][j] = 0;
+
             for (int k = 0; k < columnsA; ++k) 
             {
                 matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
             }
+
+        }
     }
 
     // display matrix C
