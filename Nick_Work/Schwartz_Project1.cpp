@@ -12,11 +12,19 @@
 
 using namespace std;
 
-// void multiplymatrix ( int matrixsize, int matrixA[][matrixsize], int matrixB[][matrixsize],
-// int* matrixC[][matrixsize] )
-//{
-    
-//}
+/*void multiplymatrix ( int matrixsize, float matrixA[matrixsize][matrixsize], float matrixB[matrixsize][matrixsize],
+float* matrixC[matrixsize][matrixsize] )
+{
+        for (int i = 0; i < matrixsize; ++i) {
+            for (int j = 0; j < matrixsize; ++j) {
+                *matrixC[i][j] = 0;
+                for (int k = 0; k < matrixsize; ++k) 
+                {
+                    *matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
+                }
+            }
+        }
+}*/
 
 
 int main() {
@@ -29,7 +37,8 @@ int main() {
         srand(time(0));
         // fill each matrix with random integers  : A, B
 
-        float matrixA[matrixsize][matrixsize], matrixB[matrixsize][matrixsize];
+        float matrixA[matrixsize][matrixsize];
+        float matrixB[matrixsize][matrixsize];
         for (int i = 0; i < matrixsize; ++i) {
             for (int j = 0; j < matrixsize; ++j) {
                 matrixA[i][j] = (rand() % 10) ;
@@ -48,6 +57,7 @@ int main() {
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
         float matrixC[matrixsize][matrixsize];
+        //multiplymatrix ( matrixsize, matrixA, matrixB, matrixC );
         for (int i = 0; i < matrixsize; ++i) {
             for (int j = 0; j < matrixsize; ++j) {
                 matrixC[i][j] = 0;
