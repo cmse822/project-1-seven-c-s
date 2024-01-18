@@ -7,14 +7,13 @@
 
 // Part 1 - Multiplying Two Matrices
 
-
 // CODE TAKEN FROM ANNA AND EDITED BY NICK
 
 using namespace std;
 
-
-// Jared Provided me this code snippet because I was struggling with properly doing double pointer
+// Jared provided me this code snippet because I was struggling with properly doing double pointer
 // and using malloc
+
 float** generate_matrix(int size) {
     float** matrix = (float**)malloc(size * sizeof(int*));
     for (int i = 0; i < size; i++) {
@@ -33,8 +32,8 @@ float** generate_matrix(int size) {
 }
 // end code provided by Jared
 
-float** multiplymatrix ( int matrixsize, float** matrixA, float** matrixB,
-float** matrixC )
+float** multiplymatrix ( int matrixsize, float** matrixA, float** matrixB, float** matrixC )
+// 
 {
     for (int i = 0; i < matrixsize; ++i) {
         for (int k = 0; k < matrixsize; ++k)  {
@@ -49,16 +48,21 @@ float** matrixC )
 
 
 int main() {
-    int finishsize = 50000;
+    int finishsize = 10000;
+
     ofstream myfile ("data.txt");
+
     myfile << "Matrix Size";
     myfile << ", ";
     myfile << "Create Matrix Time (s)";
     myfile << ", ";
     myfile << "Matrix Multiplication Time (s)";
+    myfile << ", ";
+    myfile << "Gflops";
     myfile << "\n";
-    for (int i = 50000; i < finishsize+1; ++i) {
-        int matrixsize = i;
+
+    for (int i = 2, increment = 1 ; i < finishsize+1; ++increment, i+=2*increment) {
+        float matrixsize = i;
 
         std::chrono::steady_clock::time_point start_create = std::chrono::steady_clock::now();
 
@@ -69,30 +73,28 @@ int main() {
         std::chrono::steady_clock::time_point end_create = std::chrono::steady_clock::now();
 
         float duration_creation = std::chrono::duration<float>(end_create - start_create).count();
+
         // timing is from 
         // https://stackoverflow.com/questions/56138064/how-do-i-convert-stdchronohigh-resolution-type-to-a-float-type
 
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
 
         multiplymatrix ( matrixsize, matrixA, matrixB, matrixC );
-        /*for (int i = 0; i < matrixsize; ++i) {
-            for (int j = 0; j < matrixsize; ++j) {
-                matrixC[i][j] = 0;
-                for (int k = 0; k < matrixsize; ++k) 
-                {
-                    matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
-                }
-            }
-        }*/
+     
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
         float duration = std::chrono::duration<float>(end - start).count();
+
+        float total_flops = 2*matrixsize*matrixsize*matrixsize-matrixsize*matrixsize;
+        float gflops = total_flops/duration;
 
         myfile << matrixsize;
         myfile << ", ";
         myfile << duration_creation;
         myfile << ", ";
         myfile << duration;
+        myfile << ", ";
+        myfile << gflops/1e9;
         myfile << "\n";
 
     }
