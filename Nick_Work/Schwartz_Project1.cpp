@@ -26,7 +26,7 @@ float** generate_matrix(int size) {
     for (int i = 0; i < size; i++) {
         for (int j = 0; j < size; j++) {
             // matrix[i][j] = rand() % 100; // Adjust the range
-            matrix[i][j] =  (float)rand()/(float)(RAND_MAX);
+            matrix[i][j] =  (float)rand();
         }
     }
     return matrix;
@@ -49,16 +49,26 @@ float** matrixC )
 
 
 int main() {
-    int finishsize = 1;
+    int finishsize = 50000;
     ofstream myfile ("data.txt");
+    myfile << "Matrix Size";
+    myfile << ", ";
+    myfile << "Create Matrix Time (s)";
+    myfile << ", ";
+    myfile << "Matrix Multiplication Time (s)";
+    myfile << "\n";
+    for (int i = 50000; i < finishsize+1; ++i) {
+        int matrixsize = i;
 
-    for (int i = 0; i < finishsize; ++i) {
-        int matrixsize = 2000;
+        std::chrono::steady_clock::time_point start_create = std::chrono::steady_clock::now();
 
         float** matrixA = generate_matrix(matrixsize);
         float** matrixB = generate_matrix(matrixsize);
         float** matrixC = generate_matrix(matrixsize);
 
+        std::chrono::steady_clock::time_point end_create = std::chrono::steady_clock::now();
+
+        float duration_creation = std::chrono::duration<float>(end_create - start_create).count();
         // timing is from 
         // https://stackoverflow.com/questions/56138064/how-do-i-convert-stdchronohigh-resolution-type-to-a-float-type
 
@@ -79,7 +89,9 @@ int main() {
         float duration = std::chrono::duration<float>(end - start).count();
 
         myfile << matrixsize;
-        myfile << ",";
+        myfile << ", ";
+        myfile << duration_creation;
+        myfile << ", ";
         myfile << duration;
         myfile << "\n";
 
