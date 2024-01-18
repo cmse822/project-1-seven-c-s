@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <sys/time.h>
+#include <chrono>
+#include <vector>
 
 // Part 1 - Multiplying Two Matrices
 // Ian's Processor information:
@@ -16,60 +19,103 @@ L3 cache:   12.0 MB
 
 using namespace std;
 
-int main() {
+vector<vector<double>> matrix_muliply(vector<vector<double>> matrixA, vector<vector<double>> matrixB, int m) {
+    vector<vector<double>> C(m, vector<double>(m, 0.0));
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < m; ++j) {
+            for (int k = 0; k < m; ++k) 
+            {
+                C[i][j] += matrixA[i][k] * matrixB[k][j];
+            }
+        }
+    }
+    return C;
+}
 
+// function that returns a vector of vectors (matrix)
+vector<vector<double>> generate_matrix(int m) {
+    // Initialize M, to be a vector of vectors with entries of 0.0
+    /*
+    vector<vector<double>> M is creating the empty vector of vectors called M
+    M(m, vector<double>(m, 0.0)) initializes the parent vector with entries of vectors
+    vector<double>(m,0.0) initializes those child vectors with 0.0
+    */
+    vector<vector<double>> M(m, vector<double>(m, 0.0));
+    for (int i = 0; i < m; ++i) {
+        for (int j = 0; j < m; ++j) {
+            M[i][j] = static_cast <double> (rand()) / RAND_MAX;
+        }
+    }
+    return M;
+}
+
+int main() {
     // make the dimensions of each matrix: A, B, C
-    int N = 10;
-    double A[N][N], B[N][N], C[N][N];
+    int totalSteps = 11;
+
+    vector<int> N {2, 5,
+        10, 20, 50,
+        100, 200, 500,
+        1000, 2000, 5000,};
+
+    vector<int> timeTaken(totalSteps,0);
 
     // Seeding C++'s random numbers
     srand(0);
 
-    // fill each matrix with random floats
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            A[i][j] = static_cast <double> (rand()) / RAND_MAX;
-            B[i][j] = static_cast <double> (rand()) / RAND_MAX;
-        }
+    for(int n=0; n < totalSteps; n++)
+    {
+        auto A = generate_matrix(N[n]);
+        auto B = generate_matrix(N[n]);    
+
+        // Starting high_resolution_clock before multiplication
+        // Implementation from https://www.geeksforgeeks.org/measure-execution-time-function-cpp/
+        auto start = chrono::high_resolution_clock::now();
+        // multiply A and B to get matrix C
+        auto C = matrix_muliply(A, B, N[n]);
+        // Stopping timer
+        auto stop = chrono::high_resolution_clock::now();
+        auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+
+        cout << "Time taken by matrix of size " << N[n] << " = " 
+                    << duration.count() << " us" << endl;
+        timeTaken[n] = duration.count();
     }
+
+    // display table of time taken vs size of matrix:
+    cout << "N \t\t | t (micro s)";
+    for(int i=0; i<totalSteps; i++) {
+        cout << N[i] << '\t' << timeTaken[i] << endl;
+    }
+
     // display matrices A and B
-    cout << "Matrix A with random uniform floats:" << endl;
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            cout << A[i][j] << " ";
-        }
-        cout << endl;
-    }
 
-    cout << "Matrix B with random uniform floats:" << endl;
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            cout << B[i][j] << " ";
-        }
-        cout << endl;
-    }
+    // cout << "Matrix A with random uniform floats:" << endl;
+    // for (int i = 0; i < N; ++i) {
+    //     for (int j = 0; j < N; ++j) {
+    //         cout << A[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
 
-    // multiply A and B to get matrix C
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            C[i][j] = 0;
-            for (int k = 0; k < N; ++k) 
-            {
-                C[i][j] += A[i][k] * B[k][j];
-            }
+    // cout << "Matrix B with random uniform floats:" << endl;
+    // for (int i = 0; i < N; ++i) {
+    //     for (int j = 0; j < N; ++j) {
+    //         cout << B[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
 
-        }
-    }
 
     // display matrix C
 
-    cout << "Matrix C" << endl;
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j) {
-            cout << C[i][j] << " ";
-        }
-        cout << endl;
-    }
+    // cout << "Matrix C" << endl;
+    // for (int i = 0; i < N; ++i) {
+    //     for (int j = 0; j < N; ++j) {
+    //         cout << C[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }   
 
     return 0;
 }
