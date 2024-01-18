@@ -4,6 +4,7 @@
 #include <stdio.h>      
 #include <time.h> 
 #include <fstream>
+#include <chrono>
 
 // Part 1 - Multiplying Two Matrices
 
@@ -48,11 +49,11 @@ float** multiplymatrix ( int matrixsize, float** matrixA, float** matrixB, float
 
 
 int main() {
-    int finishsize = 10000;
+    int finishsize = 5000;
 
     ofstream myfile ("data.txt");
 
-    myfile << "Matrix Size";
+    myfile << "# Matrix Size";
     myfile << ", ";
     myfile << "Create Matrix Time (s)";
     myfile << ", ";
@@ -61,7 +62,7 @@ int main() {
     myfile << "Gflops";
     myfile << "\n";
 
-    for (int i = 2, increment = 1 ; i < finishsize+1; ++increment, i+=2*increment) {
+    for (int i = 2, increment = 1 ; i < finishsize+1; increment += 4, i+=2*increment) {
         float matrixsize = i;
 
         std::chrono::steady_clock::time_point start_create = std::chrono::steady_clock::now();
@@ -96,6 +97,8 @@ int main() {
         myfile << ", ";
         myfile << gflops/1e9;
         myfile << "\n";
+
+        std::cout << matrixsize << "\t" << duration << "\t" << gflops/1e9 << std::endl;
 
     }
 
