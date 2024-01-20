@@ -3,6 +3,7 @@
 #include <ctime>
 #include <sys/time.h>
 #include <chrono>
+#include <fstream>
 #include <vector>
 
 // Part 1 - Multiplying Two Matrices
@@ -51,20 +52,28 @@ vector<vector<double>> generate_matrix(int m) {
 
 int main() {
     // make the dimensions of each matrix: A, B, C
-    int totalSteps = 11;
+    int totalSteps = 31;
 
-    vector<int> N {2, 5,
-        10, 20, 50,
-        100, 200, 500,
-        1000, 2000, 5000,};
+    vector<int> N {2, 4, 8,
+        10, 20, 30, 40, 50, 60, 70, 80, 90,
+        100, 110, 120, 140, 180, 200, 250, 300, 350, 400, 500, 700,
+        1000, 1300, 1600, 2000, 3000, 3500, 4000,};
 
     vector<int> timeTaken(totalSteps,0);
 
     // Seeding C++'s random numbers
     srand(0);
 
-    for(int n=0; n < totalSteps; n++)
-    {
+    ofstream myfile ("data.txt");
+
+    myfile << "# Matrix Size";
+    myfile << ", ";
+    myfile << "Matrix Multiplication Time (s)";
+    myfile << ", ";
+    myfile << "Gflops";
+    myfile << "\n";
+
+    for(int n=0; n < totalSteps; n++) {
         auto A = generate_matrix(N[n]);
         auto B = generate_matrix(N[n]);    
 
@@ -82,40 +91,24 @@ int main() {
         timeTaken[n] = duration.count();
     }
 
+    // Writing to file:
+    for(int n=0; n<totalSteps; n++) {
+        int operations; float time_taken;
+        operations = (2*(N[n]*N[n]*N[n]) - N[n]*N[n]);
+        time_taken = timeTaken[n]/1e6;
+        myfile << N[n];
+        myfile << ", ";
+        myfile << time_taken;
+        myfile << ", ";
+        myfile << operations/time_taken * 1/1e9;
+        myfile << "\n";
+    }
+
     // display table of time taken vs size of matrix:
     cout << "N \t\t | t (micro s)";
     for(int i=0; i<totalSteps; i++) {
         cout << N[i] << '\t' << timeTaken[i] << endl;
     }
-
-    // display matrices A and B
-
-    // cout << "Matrix A with random uniform floats:" << endl;
-    // for (int i = 0; i < N; ++i) {
-    //     for (int j = 0; j < N; ++j) {
-    //         cout << A[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
-
-    // cout << "Matrix B with random uniform floats:" << endl;
-    // for (int i = 0; i < N; ++i) {
-    //     for (int j = 0; j < N; ++j) {
-    //         cout << B[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }
-
-
-    // display matrix C
-
-    // cout << "Matrix C" << endl;
-    // for (int i = 0; i < N; ++i) {
-    //     for (int j = 0; j < N; ++j) {
-    //         cout << C[i][j] << " ";
-    //     }
-    //     cout << endl;
-    // }   
 
     return 0;
 }
