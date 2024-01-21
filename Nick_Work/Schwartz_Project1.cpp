@@ -49,7 +49,7 @@ float** multiplymatrix ( int matrixsize, float** matrixA, float** matrixB, float
 
 
 int main() {
-    int finishsize = 10000;
+    int finishsize = 15000;
 
     ofstream myfile ("data.txt");
 
@@ -62,7 +62,7 @@ int main() {
     myfile << "Gflops";
     myfile << "\n";
 
-    for (int i = 2, increment = 1 ; i < finishsize+1; increment += 1, i+=increment) {
+    for (int i = 2, increment = 1 ; i < finishsize; increment += 1, i+=increment) {
         float matrixsize = i;
 
         std::chrono::steady_clock::time_point start_create = std::chrono::steady_clock::now();
@@ -83,6 +83,10 @@ int main() {
         multiplymatrix ( matrixsize, matrixA, matrixB, matrixC );
      
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        
+        delete matrixA;
+        delete matrixB;
+        delete matrixC;
 
         float duration = std::chrono::duration<float>(end - start).count();
 
