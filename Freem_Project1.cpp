@@ -52,19 +52,25 @@ vector<vector<double>> generate_matrix(int m) {
 
 int main() {
     // make the dimensions of each matrix: A, B, C
-    int totalSteps = 31;
+    int totalSteps = 47;
 
-    vector<int> N {2, 4, 8,
-        10, 20, 30, 40, 50, 60, 70, 80, 90,
-        100, 110, 120, 140, 180, 200, 250, 300, 350, 400, 500, 700,
-        1000, 1300, 1600, 2000, 3000, 3500, 4000,};
+    vector<int> N {2, 4, 8, 10, 15,
+	22, 30, 40, 50, 60,
+	70, 75, 80, 85, 90,
+	95, 100, 105, 110, 115,
+	120, 130, 140, 160, 180,
+	200, 230, 260, 300, 350,
+	400, 500, 600, 700, 800,
+	900, 1000, 1200, 1400, 1600,
+	1800, 2000, 2300, 2600, 3000,
+	3500, 4000,};
 
     vector<int> timeTaken(totalSteps,0);
 
     // Seeding C++'s random numbers
     srand(0);
 
-    ofstream myfile ("data.txt");
+    ofstream myfile ("data_not100.txt");
 
     myfile << "# Matrix Size";
     myfile << ", ";
@@ -84,7 +90,7 @@ int main() {
         auto C = matrix_muliply(A, B, N[n]);
         // Stopping timer
         auto stop = chrono::high_resolution_clock::now();
-        auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+        long long duration = chrono::duration_cast<chrono::microseconds>(stop - start);
 
         cout << "Time taken by matrix of size " << N[n] << " = " 
                     << duration.count() << " us" << endl;
@@ -93,7 +99,7 @@ int main() {
 
     // Writing to file:
     for(int n=0; n<totalSteps; n++) {
-        int operations; float time_taken;
+        long long operations; float time_taken;
         operations = (2*(N[n]*N[n]*N[n]) - N[n]*N[n]);
         time_taken = timeTaken[n]/1e6;
         myfile << N[n];
